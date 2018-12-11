@@ -1,4 +1,4 @@
-package com.daniel.cursoudemy.Repositories;
+package com.daniel.cursoudemy.repositories;
 
 import com.daniel.cursoudemy.domain.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;

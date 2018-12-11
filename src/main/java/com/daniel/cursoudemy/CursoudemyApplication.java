@@ -1,7 +1,7 @@
 package com.daniel.cursoudemy;
 
-import com.daniel.cursoudemy.Repositories.CategoriaRepository;
-import com.daniel.cursoudemy.Repositories.ProdutoRepository;
+import com.daniel.cursoudemy.repositories.CategoriaRepository;
+import com.daniel.cursoudemy.repositories.ProdutoRepository;
 import com.daniel.cursoudemy.domain.Categoria;
 import com.daniel.cursoudemy.domain.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
