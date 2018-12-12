@@ -1,6 +1,7 @@
 package com.daniel.cursoudemy.domain;
 
 import com.daniel.cursoudemy.domain.enums.TipoCliente;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,15 +19,20 @@ public class Cliente implements Serializable {
     private String cpfOuCnpj;
     private Integer tipo;
 
+    /**
+     * Esta anotação @JsonManagedReference serve para o cliente ter acesso aos endereços
+     * também serve para evitar um erro de loop ao buscar os registros do endereço e cliente;
+     */
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name="telefone")
-    private Set<String> telefones=new HashSet<>();
+    @CollectionTable(name = "telefone")
+    private Set<String> telefones = new HashSet<>();
 
 
-    public  Cliente(){
+    public Cliente() {
 
     }
 
@@ -70,7 +76,7 @@ public class Cliente implements Serializable {
         this.cpfOuCnpj = cpfOuCnpj;
     }
 
-// ---- ------------- ENUM --------------- ------
+    // ---- ------------- ENUM --------------- ------
     public TipoCliente getTipo() {
         return TipoCliente.toEnum(tipo);
     }
