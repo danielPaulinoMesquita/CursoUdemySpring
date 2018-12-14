@@ -1,6 +1,7 @@
 package com.daniel.cursoudemy.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -23,12 +24,12 @@ public class Endereco implements Serializable {
     /**
      * Esta anotação JsonBackReference serve para que o endereço não veja os clientes associados
      */
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cidade_id")
     private Cidade cidade;

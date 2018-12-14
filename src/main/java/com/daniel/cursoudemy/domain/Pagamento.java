@@ -1,7 +1,7 @@
 package com.daniel.cursoudemy.domain;
 
 import com.daniel.cursoudemy.domain.enums.EstadoPagamento;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,7 +16,8 @@ public abstract class Pagamento implements Serializable {
     private Integer id;
     private Integer estado;
 
-    @JsonBackReference
+    /*@JsonBackReference tem o mesmo objetivo do managedReference, com funcionalidade de tornar a classe não serializavel*/
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name="pedido_id")
     @MapsId

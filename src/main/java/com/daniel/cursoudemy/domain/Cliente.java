@@ -1,9 +1,7 @@
 package com.daniel.cursoudemy.domain;
 
 import com.daniel.cursoudemy.domain.enums.TipoCliente;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -24,7 +22,7 @@ public class Cliente implements Serializable {
      * Esta anotação @JsonManagedReference serve para o cliente ter acesso aos endereços
      * também serve para evitar um erro de loop ao buscar os registros do endereço e cliente;
      */
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList<>();
 
@@ -32,7 +30,8 @@ public class Cliente implements Serializable {
     @CollectionTable(name = "telefone")
     private Set<String> telefones = new HashSet<>();
 
-    @JsonBackReference
+    /*@JsonBackReference tem o mesmo objetivo do managedReference, com funcionalidade de tornar a classe não serializavel*/
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList<>();
 
