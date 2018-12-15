@@ -19,7 +19,7 @@ public class ClienteResource {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 
-        Cliente obj = service.buscar(id);
+        Cliente obj = service.find(id);
         //  return new ResponseEntity<>(obj, HttpStatus.OK); OUTRA FORMA DE RETORNA O OBJ EM JSON
         return ResponseEntity.ok().body(obj);
     }
