@@ -2,6 +2,7 @@ package com.daniel.cursoudemy.domain;
 
 import com.daniel.cursoudemy.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
@@ -45,7 +46,7 @@ public class Cliente implements Serializable {
         this.nome = nome;
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
-        this.tipo = tipo.getCod();
+        this.tipo = (tipo == null) ? null : tipo.getCod();
     }
 
     public Integer getId() {
