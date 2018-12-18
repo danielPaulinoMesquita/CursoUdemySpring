@@ -24,7 +24,7 @@ public class Cliente implements Serializable {
      * também serve para evitar um erro de loop ao buscar os registros do endereço e cliente;
      */
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
