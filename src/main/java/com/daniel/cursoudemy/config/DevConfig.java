@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Profile;
 
 import java.text.ParseException;
 
+/**
+ * Dev config, test config são responsáveis por escolher o aplication.properties e
+ * assim escolher o banco de teste ou do MySql
+ */
 @Configuration
 @Profile("dev")
 public class DevConfig {
