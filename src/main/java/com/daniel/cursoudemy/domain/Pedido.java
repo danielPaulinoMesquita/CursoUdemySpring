@@ -3,10 +3,10 @@ package com.daniel.cursoudemy.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Entity
 public class Pedido implements Serializable {
@@ -112,5 +112,30 @@ public class Pedido implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        // Classe e metodo para transformar o formato do double para REAISN
+        NumberFormat nf= NumberFormat.getCurrencyInstance(new Locale("pt","BR"));
+
+        //Classe Decimal Format para formatar datas
+        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        final StringBuilder sb = new StringBuilder("Pedido número: ");
+        sb.append(getId());
+        sb.append(", Instante: ");
+        sb.append(sdf.format(getInstante()));
+        sb.append(", Cliente: ");
+        sb.append(getCliente().getNome());
+        sb.append(", Situação do Pagamento: ");
+        sb.append(getPagamento().getEstado().getDescricao());
+        sb.append("\nDetalhes:\n");
+        for(ItemPedido ip: getItens()){
+            sb.append(ip.toString());
+        }
+        sb.append("Valor total: ");
+        sb.append(nf.format(getValorTotal()));
+        return sb.toString();
     }
 }
