@@ -1,6 +1,8 @@
 package com.daniel.cursoudemy.config;
 
 import com.daniel.cursoudemy.services.DBService;
+import com.daniel.cursoudemy.services.EmailService;
+import com.daniel.cursoudemy.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,4 +34,9 @@ public class DevConfig {
         }
         return false;
     }
+
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService();
+    }//<-- Antivirus do seu pc, pode bloquear o envio
 }
