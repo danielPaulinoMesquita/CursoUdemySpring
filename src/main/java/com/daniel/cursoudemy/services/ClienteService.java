@@ -8,7 +8,6 @@ import com.daniel.cursoudemy.dto.ClienteDTO;
 import com.daniel.cursoudemy.dto.ClienteNewDTO;
 import com.daniel.cursoudemy.exceptions.DataIntegrityException;
 import com.daniel.cursoudemy.exceptions.ObjectNotFoundException;
-import com.daniel.cursoudemy.repositories.CidadeRepository;
 import com.daniel.cursoudemy.repositories.ClienteRepository;
 import com.daniel.cursoudemy.repositories.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +24,9 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
+
+    @Autowired
+    private BCryptPasswordEncoder pe;
 
     @Autowired
     private ClienteRepository repo;
@@ -74,12 +77,12 @@ public class ClienteService {
 
     // Converter cliente DTO para cliente
     public Cliente fromDTO(ClienteDTO objDto) {
-        Cliente cli = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
+        Cliente cli = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null,null);
         return cli;
     }
 
     public Cliente fromDTO(ClienteNewDTO objDto) {
-        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
+        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()),pe.encode(objDto.getSenha()));
 
         Cidade cid= new Cidade(objDto.getCidadeId(),null,null);
 

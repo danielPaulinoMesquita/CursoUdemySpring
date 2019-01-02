@@ -33,7 +33,7 @@ public class ResourceExceptionHandler {
         // ValidationError possui uma lista, na qual será adicionado os erros da exceção de validação
         ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erro de Validação!!", System.currentTimeMillis());
 
-        //`Pegando os campos da exceção MethodArgumentNotValidException e adicionando a lista do validationError
+        // Pegando os campos da exceção MethodArgumentNotValidException e adicionando a lista do validationError
         for (FieldError x : o.getBindingResult().getFieldErrors()) {
             err.addError(x.getField(), x.getDefaultMessage());
         }
