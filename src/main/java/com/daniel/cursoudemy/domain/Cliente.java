@@ -1,11 +1,13 @@
 package com.daniel.cursoudemy.domain;
 
+import com.daniel.cursoudemy.domain.enums.Perfil;
 import com.daniel.cursoudemy.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cliente implements Serializable {
@@ -33,8 +35,12 @@ public class Cliente implements Serializable {
     private List<Endereco> enderecos = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "telefone")
+    @CollectionTable(name = "TELEFONE")//<-- SERÁ CRIADO UMA TABELA DE TELEFONE
     private Set<String> telefones = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")//<-- SERÁ CRIADO UMA TABELA DE PERFIS
+    private Set<Integer> perfis = new HashSet<>();
 
     /*@JsonBackReference tem o mesmo objetivo do managedReference, com funcionalidade de tornar a classe não serializavel*/
     @JsonIgnore
@@ -52,7 +58,7 @@ public class Cliente implements Serializable {
         this.email = email;
         this.cpfOuCnpj = cpfOuCnpj;
         this.tipo = (tipo == null) ? null : tipo.getCod();
-        this.senha= senha;
+        this.senha = senha;
     }
 
     public Integer getId() {
@@ -102,6 +108,15 @@ public class Cliente implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    //Retorna os perfis do cliente
+    public Set<Perfil> getPerfis() {
+        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil){
+        perfis.add(perfil.getCod());
     }
 
     public Set<String> getTelefones() {
