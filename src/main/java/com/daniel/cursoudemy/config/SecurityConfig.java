@@ -1,8 +1,10 @@
 package com.daniel.cursoudemy.config;
 
 import com.daniel.cursoudemy.security.JWTAuthenticationFilter;
+import com.daniel.cursoudemy.security.JWTAuthorizationFilter;
 import com.daniel.cursoudemy.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -27,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private Environment env;
 
+    @Qualifier(value = "userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -56,10 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
 
                 .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET)
-                .permitAll().anyRequest()
+                .permitAll()
+                .anyRequest()
                 .authenticated();
 
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtUtil,userDetailsService));
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
