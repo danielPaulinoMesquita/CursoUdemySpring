@@ -1,14 +1,17 @@
 package com.daniel.cursoudemy.services;
 
-import com.daniel.cursoudemy.domain.ItemPedido;
-import com.daniel.cursoudemy.domain.PagamentoComBoleto;
-import com.daniel.cursoudemy.domain.Pedido;
+import com.daniel.cursoudemy.domain.*;
 import com.daniel.cursoudemy.domain.enums.EstadoPagamento;
+import com.daniel.cursoudemy.exceptions.AuthorizationException;
 import com.daniel.cursoudemy.exceptions.ObjectNotFoundException;
 import com.daniel.cursoudemy.repositories.ItemPedidoRepository;
 import com.daniel.cursoudemy.repositories.PagamentoRepository;
 import com.daniel.cursoudemy.repositories.PedidoRepository;
+import com.daniel.cursoudemy.security.UserSS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +73,16 @@ public class PedidoService {
         itemPedidoRepository.saveAll(obj.getItens());
         emailService.sendOrderConfirmationHtmlEmail(obj);
         return obj;
+    }
+//Buscar Pedidos por cliente
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        UserSS user= UserService.authenticated();
+        if(user==null){
+            throw new AuthorizationException("Acesso Negado");
+        }
+        Cliente cliente= clienteService.find(user.getId());
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction),orderBy);
+        return repo.findByCliente(cliente,pageRequest);
     }
 
 
