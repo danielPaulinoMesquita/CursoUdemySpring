@@ -3,13 +3,16 @@ package com.daniel.cursoudemy.services;
 import com.daniel.cursoudemy.domain.Cidade;
 import com.daniel.cursoudemy.domain.Cliente;
 import com.daniel.cursoudemy.domain.Endereco;
+import com.daniel.cursoudemy.domain.enums.Perfil;
 import com.daniel.cursoudemy.domain.enums.TipoCliente;
 import com.daniel.cursoudemy.dto.ClienteDTO;
 import com.daniel.cursoudemy.dto.ClienteNewDTO;
+import com.daniel.cursoudemy.exceptions.AuthorizationException;
 import com.daniel.cursoudemy.exceptions.DataIntegrityException;
 import com.daniel.cursoudemy.exceptions.ObjectNotFoundException;
 import com.daniel.cursoudemy.repositories.ClienteRepository;
 import com.daniel.cursoudemy.repositories.EnderecoRepository;
+import com.daniel.cursoudemy.security.UserSS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +50,11 @@ public class ClienteService {
     }
 
     public Cliente find(Integer id) {
+        UserSS user= UserService.authenticated();
+        if(user==null||!user.hasRole(Perfil.ADMIN)&&!id.equals(user.getId())){
+            throw new AuthorizationException("Acesso Negado");
+        }
+
         Optional<Cliente> cliente = repo.findById(id);
         return cliente.orElseThrow(() -> new ObjectNotFoundException("Objeto não Encontrado! ID: " + id
                 + ", Tipo: " + Cliente.class.getName()));

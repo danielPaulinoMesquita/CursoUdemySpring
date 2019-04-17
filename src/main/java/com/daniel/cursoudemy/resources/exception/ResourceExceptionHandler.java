@@ -1,5 +1,6 @@
 package com.daniel.cursoudemy.resources.exception;
 
+import com.daniel.cursoudemy.exceptions.AuthorizationException;
 import com.daniel.cursoudemy.exceptions.DataIntegrityException;
 import com.daniel.cursoudemy.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,12 @@ public class ResourceExceptionHandler {
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationException o, HttpServletRequest request) {
+
+        StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), o.getMessage(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }
