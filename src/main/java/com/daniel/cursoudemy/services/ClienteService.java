@@ -55,8 +55,8 @@ public class ClienteService {
     }
 
     public Cliente find(Integer id) {
-        UserSS user= UserService.authenticated();
-        if(user==null||!user.hasRole(Perfil.ADMIN)&&!id.equals(user.getId())){
+        UserSS user = UserService.authenticated();
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
             throw new AuthorizationException("Acesso Negado");
         }
 
@@ -91,14 +91,14 @@ public class ClienteService {
 
     // Converter cliente DTO para cliente
     public Cliente fromDTO(ClienteDTO objDto) {
-        Cliente cli = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null,null);
+        Cliente cli = new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
         return cli;
     }
 
     public Cliente fromDTO(ClienteNewDTO objDto) {
-        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()),pe.encode(objDto.getSenha()));
+        Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()), pe.encode(objDto.getSenha()));
 
-        Cidade cid= new Cidade(objDto.getCidadeId(),null,null);
+        Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
 
 
         Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(),
@@ -107,11 +107,11 @@ public class ClienteService {
         cli.getEnderecos().add(end);
         cli.getTelefones().add(objDto.getTelefone1());
 
-        if(objDto.getTelefone2()!=null){
+        if (objDto.getTelefone2() != null) {
             cli.getTelefones().add(objDto.getTelefone2());
         }
 
-        if(objDto.getTelefone3()!=null){
+        if (objDto.getTelefone3() != null) {
             cli.getTelefones().add(objDto.getTelefone3());
         }
         return cli;
@@ -124,8 +124,19 @@ public class ClienteService {
     }
 
     // Recebe um arquivo para ser foto do perfil
-    public URI uploadProfilePicture(MultipartFile multipartFile){
-        return s3Service.uploadFile(multipartFile);
+    public URI uploadProfilePicture(MultipartFile multipartFile) {
+        UserSS user = UserService.authenticated();
+
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado!");
+        }
+
+        URI uri = s3Service.uploadFile(multipartFile);
+        Cliente cliente = find(user.getId());
+        cliente.setImageUrl(uri.toString());
+        update(cliente);
+
+        return uri;
     }
 
 }
