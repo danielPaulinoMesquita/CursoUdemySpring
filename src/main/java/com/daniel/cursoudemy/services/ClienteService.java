@@ -21,8 +21,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.AuthenticationException;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +42,9 @@ public class ClienteService {
 
     @Autowired
     private EnderecoRepository endRepo;
+
+    @Autowired
+    private S3Service s3Service;
 
     @Transactional
     public Cliente insert(Cliente obj) {
@@ -116,6 +121,11 @@ public class ClienteService {
     private void updateData(Cliente newObj, Cliente obj) {
         newObj.setNome(obj.getNome());
         newObj.setEmail(obj.getEmail());
+    }
+
+    // Recebe um arquivo para ser foto do perfil
+    public URI uploadProfilePicture(MultipartFile multipartFile){
+        return s3Service.uploadFile(multipartFile);
     }
 
 }

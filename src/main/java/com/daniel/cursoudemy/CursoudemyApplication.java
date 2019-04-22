@@ -19,8 +19,8 @@ public class CursoudemyApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-        s3Service.uploadFile("//home//daniel//Imagens//finalfantasyx.jpeg");
+// chamada de metodo para teste
+// s3Service.uploadFile("//home//daniel//Imagens//finalfantasyx.jpeg");
 
     }
 }
