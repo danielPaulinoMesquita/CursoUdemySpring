@@ -3,6 +3,9 @@ package com.daniel.cursoudemy.resources;
 import com.daniel.cursoudemy.dto.CategoriaDTO;
 import com.daniel.cursoudemy.services.CategoriaService;
 import com.daniel.cursoudemy.domain.Categoria;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -23,6 +26,8 @@ public class CategoriaResource {
     @Autowired
     private CategoriaService service;
 
+    //API OPERATION SERVE PARA ANOTAÇÕES SWAGGER
+    @ApiOperation(value="Busca por id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 
@@ -32,6 +37,7 @@ public class CategoriaResource {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')") //Pre Authorize dar permissão só para ADMIN
+    @ApiOperation(value="Insere categoria")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO objDto) {
         Categoria obj = service.fromDTO(objDto);
@@ -42,6 +48,7 @@ public class CategoriaResource {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value="Atualiza categoria por id")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
         Categoria obj = service.fromDTO(objDto);
@@ -51,6 +58,10 @@ public class CategoriaResource {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @ApiOperation(value="Remove categoria")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Não é possível excluir uma categoria que possui produtos"),
+            @ApiResponse(code = 404, message = "Código inexistente") })
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
 
