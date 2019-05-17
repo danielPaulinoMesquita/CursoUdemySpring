@@ -33,16 +33,16 @@ public class JWTUtil {
             Date expirationDate = claims.getExpiration();
             Date now = new Date(System.currentTimeMillis());
 
-            if (username != null && expirationDate != null && now.before(expirationDate)){
+            if (username != null && expirationDate != null && now.before(expirationDate)) {
                 return true;
             }
         }
         return false;
     }
 
-    public String getUsername(String token){
-        Claims claims= getClaims(token);
-        if(claims!=null){
+    public String getUsername(String token) {
+        Claims claims = getClaims(token);
+        if (claims != null) {
             return claims.getSubject();
         }
         return null;

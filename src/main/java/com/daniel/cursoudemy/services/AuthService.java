@@ -22,11 +22,11 @@ public class AuthService {
     @Autowired
     private EmailService emailService;
 
-    private Random random= new Random();
+    private Random random = new Random();
 
-    public void sendNewPassword(String email){
-        Cliente cliente= clienteRepository.findByEmail(email);
-        if(cliente==null){
+    public void sendNewPassword(String email) {
+        Cliente cliente = clienteRepository.findByEmail(email);
+        if (cliente == null) {
             throw new ObjectNotFoundException("Email não encontrado");
         }
 
@@ -38,22 +38,22 @@ public class AuthService {
     }
 
     private String newPassword() {
-        char[] vet= new char[10];
-        for(int i=0; i<10; i++){
-            vet[i]=randomChar();
+        char[] vet = new char[10];
+        for (int i = 0; i < 10; i++) {
+            vet[i] = randomChar();
         }
         return vet.toString();
     }
 
     private char randomChar() {
-        int opt= random.nextInt(3);
-        if(opt==0){//gera um digito
-            return (char)(random.nextInt(10)+48);
-        }else if(opt==1){
-            return (char)(random.nextInt(26)+65);
+        int opt = random.nextInt(3);
+        if (opt == 0) {//gera um digito
+            return (char) (random.nextInt(10) + 48);
+        } else if (opt == 1) {
+            return (char) (random.nextInt(26) + 65);
 
-        }else{ //Gera minusculo
-            return (char)(random.nextInt(26)+65);
+        } else { //Gera minusculo
+            return (char) (random.nextInt(26) + 65);
 
         }
     }

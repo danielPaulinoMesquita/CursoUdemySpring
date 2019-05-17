@@ -9,7 +9,7 @@ public class CidadeDTO implements Serializable {
     private Integer id;
     private String nome;
 
-    public CidadeDTO(){
+    public CidadeDTO() {
 
     }
 

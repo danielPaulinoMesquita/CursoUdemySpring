@@ -30,7 +30,7 @@ public class ProdutoService {
     }
 
     public Page<Produto> search(String nome, List<Integer> ids, Integer page, Integer linesPerPage, String orderBy, String direction) {
-        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction),orderBy);
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         List<Categoria> categorias = catRepo.findAllById(ids);
         return repo.search(nome, categorias, pageRequest);
 
